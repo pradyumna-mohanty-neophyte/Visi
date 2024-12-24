@@ -125,7 +125,7 @@ export default function Home2() {
   const handleSaveChanges = async () => {
     try {
       setIsLoading(true);
-  
+
       // Prepare the data to be sent to the backend
       const updateData = {
         batch_no: editedData.batchNo,
@@ -138,13 +138,13 @@ export default function Home2() {
         metadata_id: editedData.metadata_id,
         updateData: updateData
       });
-  
+
       // Make API call to update the database
       const response = await updateMetadata(editedData.metadata_id, updateData);
-  
+
       if (response.data) {  // Check response from your backend
         // Update local state
-        setTableData(tableData.map((item) => 
+        setTableData(tableData.map((item) =>
           item.metadata_id === editedData.metadata_id ? {
             ...item,
             batchNo: editedData.batchNo,
@@ -153,7 +153,7 @@ export default function Home2() {
             expDate: editedData.expDate
           } : item
         ));
-  
+
         // setSnackbarConfig({
         //   open: true,
         //   message: "Row updated successfully",
@@ -534,12 +534,12 @@ export default function Home2() {
   return (
     <>
       <div
-        className={`w-full flex flex-col justify-center items-center p-0 font-sans ${anchorEl ? `backdrop-blur-xl opacity-20 bg-gray-300` : ``
+        className={`w-full flex flex-col md:flex-row md:w-screen justify-center items-center p-0 font-sans ${anchorEl ? `backdrop-blur-xl opacity-20 bg-gray-300` : ``
           }`}
       >
-        <div className="w-full flex justify-between">
+        <div className="w-full flex justify-center items-center md:h-auto">
           {/* <h1 className="text-xl md:text-3xl">Product Details</h1> */}
-          <div className="flex">
+          <div className="flex w-full md:w-2/3 lg:w-1/2">
           </div>
           <Popover
             id={id}
@@ -566,12 +566,13 @@ export default function Home2() {
             </div>
           </Popover>
         </div>
-        <div className="flex w-[100vw] h-[100vh] m-4 rounded-lg gap-3 justify-center flex-wrap">
+
+        <div className="flex md:w-[100vw] md:h-[100vh] m-4 rounded-lg gap-3 justify-center flex-wrap">
           {/* <div> */}
           <Grid
             container
             spacing={2}
-            className="-z-[20px] w-[100vw] h-[80vh]"
+            className="-z-[20px] md:w-[100vw] md:h-[80vh]"
           >
 
 
@@ -583,7 +584,7 @@ export default function Home2() {
             >
               <div id="container" className="">
                 {src ? (
-                  <>
+                  <div className="flex-col">
                     <Paper elevation={4} className="w-[100%] h-[700px] relative p-5 ">
                       {/* <div className="w-full h-full rounded-lg" > */}
                       <img ref={videoRef} src={src} alt="Video Stream" controls
@@ -641,7 +642,7 @@ export default function Home2() {
                       </div>
 
                     </Paper>
-                    
+
                     <div style={{ background: 'lightgray' }} className="flex justify-around w-[100vw] h-26 mt-1 p-5">
                       {tableData.length > 0 && [
                         { label: 'EAN', value: tableData[0]?.barcode },
@@ -655,7 +656,7 @@ export default function Home2() {
                         </Paper>
                       ))}
                     </div>
-                  </>
+                  </div>
                 ) : (
                   <>
                     <div className="h-full flex flex-col justify-center">
@@ -665,11 +666,13 @@ export default function Home2() {
                 )}
               </div>
             </Grid>
+
+            {/* This is the Table Container Code  */}
             <Grid
               item
               xs={12}
               md={6}
-            // className=" "
+              className=" w-full h-fit"
             >
               <div
                 className={`flex justify-center md:mt-0 mt-6 ${anchorEl ? `backdrop-blur-xl opacity-20 bg-gray-300` : ``
@@ -677,7 +680,7 @@ export default function Home2() {
 
               >
                 <TableContainer
-                  className="w-auto max-w-[98%] shadow-lg rounded-lg overflow-hidden"
+                  className="w-full max-h-[300px] md:max-h-[600px] overflow-auto"
                   component={Paper}
                   sx={{
                     maxHeight: 700, // Set the fixed height (e.g., 400px)
@@ -692,7 +695,7 @@ export default function Home2() {
                           sx={{
                             color: "white",
                             fontWeight: "bold",
-                            fontSize: "1.5rem",
+                            fontSize: "1rem",
                           }}
                         >
                           EAN
@@ -702,7 +705,7 @@ export default function Home2() {
                           sx={{
                             color: "white",
                             fontWeight: "bold",
-                            fontSize: "1.5rem",
+                            fontSize: "1rem",
                           }}
                         >
                           Batch No
@@ -712,7 +715,7 @@ export default function Home2() {
                           sx={{
                             color: "white",
                             fontWeight: "bold",
-                            fontSize: "1.5rem",
+                            fontSize: "1rem",
                           }}
                         >
                           {/* Length&nbsp;(mm) */}
@@ -723,7 +726,7 @@ export default function Home2() {
                           sx={{
                             color: "white",
                             fontWeight: "bold",
-                            fontSize: "1.5rem",
+                            fontSize: "1rem",
                           }}
                         >
                           {/* Breadth&nbsp;(mm) */}
@@ -734,7 +737,7 @@ export default function Home2() {
                           sx={{
                             color: "white",
                             fontWeight: "bold",
-                            fontSize: "1.5rem",
+                            fontSize: "1rem",
                           }}
                         >
                           EXP
@@ -875,7 +878,14 @@ export default function Home2() {
                 </Dialog>
               </div>
             </Grid>
-            <WorkflowStatus />
+
+            {/* WorkFlow Code  */}
+            <div className="flex flex-col md:flex-row w-full min-h-screen">
+              {/* Other components */}
+              <div className="flex flex-col flex-grow">
+                <WorkflowStatus />
+              </div>
+            </div>
           </Grid>
           {/* </div> */}
         </div>
@@ -883,10 +893,11 @@ export default function Home2() {
 
 
       <Snackbar
-        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
         open={snackbarConfig.open}
         autoHideDuration={6000}
         onClose={() => setSnackbarConfig({ ...snackbarConfig, open: false })}
+      // className="flex w-full justify-center"
       >
         <Alert
           onClose={() => setSnackbarConfig({ ...snackbarConfig, open: false })}
