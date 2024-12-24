@@ -226,7 +226,7 @@ export const enable_autocapture = async (enable) => {
 
 export const updateMetadata = async (metadata_id, updatedData) => {
   try {
-    const response = await axios.post('http://192.168.1.101:4040/updata_data', {
+    const response = await axios.post('http://192.168.29.131:4040/updata_data', {
       metadata_id: metadata_id,
       key_value: updatedData
     });

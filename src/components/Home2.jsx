@@ -57,6 +57,7 @@ export default function Home2() {
   const [selectedRow, setSelectedRow] = useState(null);
   const [editedData, setEditedData] = useState({});
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
+  const [statusUpdates, setStatusUpdates] = useState([]); // Add this state
 
 
   const handleStartClick = async () => {
@@ -198,27 +199,6 @@ export default function Home2() {
       setIsLoading(false);
     }
   };
-  // const handleClick = async () => {
-  //   setIsLoading(true);
-  //   try {
-  //     // Make the POST request to trigger frame capture, but don't expect metadata in the response
-  //     // const res = await capture_frames();
-  //     // console.log("Frame capture initiated. Waiting for metadata via node...");
-
-  //     // Make sure the socket is set up to receive the metadata
-  //     // if (!socket) {
-  //     //   setupSocket();  // Setup socket if not already connected
-  //     // }
-  //     console.log('hi');
-
-  //   } catch (error) {
-  //     console.error("Error capturing frames:", error);
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
-
-
 
   useEffect(() => {
     console.log("OCR Result on render:", ocrResult);
@@ -291,25 +271,6 @@ export default function Home2() {
         console.log("Socket Connected!");  // Add this log to confirm the connection
       });
 
-      // newSocket.on("connect_response", (data) => {
-      //   console.log("Received connect response from server:", data);
-      // });
-
-
-      // // Listen for metadata updates from the backend
-      // newSocket.on("metadata", (data) => {
-      //   console.log("Received metadata from socket:", data);
-      //   setOcrResult(data);  // Assuming the metadata is directly usable
-      //   setAllOcrResults((prevResults) => [data, ...prevResults]);
-      // });
-
-      // newSocket.on("barcode", (data) => {
-      //   console.log("Received barcode from socket:", data);
-      //   // setOcrResult(data);  // Assuming the metadata is directly usable
-      //   // setAllOcrResults((prevResults) => [data, ...prevResults]);
-      // });
-
-
       // Handle barcode events
       newSocket.on("barcode", (data) => {
         console.log("Received barcode from socket:", data);
@@ -349,6 +310,12 @@ export default function Home2() {
           return updatedData;
         });
       });
+
+
+      newSocket.on("status-updates", (data) => {
+        // console.log("Received status updates from socket:", data);
+        setStatusUpdates(data); // Store the status updates in state
+      })
 
 
 
@@ -642,7 +609,7 @@ export default function Home2() {
 
                     </Paper>
                     
-                    <div style={{ background: 'lightgray' }} className="flex justify-around w-[100vw] h-26 mt-1 p-5">
+                    {/* <div style={{ background: 'lightgray' }} className="flex justify-around w-[100vw] h-26 mt-1 p-5">
                       {tableData.length > 0 && [
                         { label: 'EAN', value: tableData[0]?.barcode },
                         { label: 'Batch No.', value: tableData[0]?.batchNo },
@@ -654,7 +621,7 @@ export default function Home2() {
                           {renderSection(item.label, item.value)}
                         </Paper>
                       ))}
-                    </div>
+                    </div> */}
                   </>
                 ) : (
                   <>
@@ -875,7 +842,7 @@ export default function Home2() {
                 </Dialog>
               </div>
             </Grid>
-            <WorkflowStatus />
+            <WorkflowStatus statusUpdates={statusUpdates} />
           </Grid>
           {/* </div> */}
         </div>
